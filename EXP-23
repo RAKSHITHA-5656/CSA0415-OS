@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+int main() {
+    int n, i, j, time = 0, done[10] = {0};
+    int at[10], bt[10], pr[10], wt[10], tat[10];
+    int p, count = 0;
+    float awt = 0, atat = 0;
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++) {
+        scanf("%d%d%d", &at[i], &bt[i], &pr[i]);
+    }
+
+    while(count < n) {
+        p = -1;
+
+        for(i = 0; i < n; i++) {
+            if(!done[i] && at[i] <= time) {
+                if(p == -1 || pr[i] < pr[p])
+                    p = i;
+            }
+        }
+
+        if(p == -1) {
+            time++;
+            continue;
+        }
+
+        wt[p] = time - at[p];
+        time += bt[p];
+        tat[p] = time - at[p];
+
+        done[p] = 1;
+        count++;
+    }
+
+    printf("\nP\tAT\tBT\tPR\tWT\tTAT\n");
+
+    for(i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
+        i+1, at[i], bt[i], pr[i], wt[i], tat[i]);
+
+        awt += wt[i];
+        atat += tat[i];
+    }
+
+    printf("\nAverage WT: %.2f", awt/n);
+    printf("\nAverage TAT: %.2f", atat/n);
+
+    return 0;
+}
