@@ -1,0 +1,41 @@
+
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main()
+{
+    struct stat st;
+    FILE *fp;
+
+    fp = fopen("demo.txt", "w");
+    if(fp == NULL)
+    {
+        printf("File creation failed");
+        return 1;
+    }
+
+    fprintf(fp, "Linux File Permissions");
+    fclose(fp);
+
+    chmod("demo.txt", 0644);
+    stat("demo.txt", &st);
+
+    printf("File: demo.txt\n");
+
+    printf("Owner: ");
+    printf("%c", (st.st_mode & S_IRUSR) ? 'r' : '-');
+    printf("%c", (st.st_mode & S_IWUSR) ? 'w' : '-');
+    printf("%c\n", (st.st_mode & S_IXUSR) ? 'x' : '-');
+
+    printf("Group: ");
+    printf("%c", (st.st_mode & S_IRGRP) ? 'r' : '-');
+    printf("%c", (st.st_mode & S_IWGRP) ? 'w' : '-');
+    printf("%c\n", (st.st_mode & S_IXGRP) ? 'x' : '-');
+
+    printf("Others: ");
+    printf("%c", (st.st_mode & S_IROTH) ? 'r' : '-');
+    printf("%c", (st.st_mode & S_IWOTH) ? 'w' : '-');
+    printf("%c\n", (st.st_mode & S_IXOTH) ? 'x' : '-');
+
+    return 0;
+}
