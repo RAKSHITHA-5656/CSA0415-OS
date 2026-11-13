@@ -1,0 +1,40 @@
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+int main()
+{
+    int fd;
+    char data[] = "Operating System";
+    struct stat st;
+    DIR *dir;
+    struct dirent *entry;
+
+    fd = open("sample.txt", O_CREAT | O_RDWR, 0644);
+
+    write(fd, data, sizeof(data));
+    printf("File created successfully\n");
+
+    printf("File flags: %d\n", fcntl(fd, F_GETFL));
+
+    lseek(fd, 0, SEEK_SET);
+    printf("File pointer moved to beginning\n");
+
+    if (stat("sample.txt", &st) == 0)
+        printf("File size: %ld bytes\n", (long)st.st_size);
+
+    close(fd);
+
+    dir = opendir(".");
+    printf("\nDirectory contents:\n");
+
+    while ((entry = readdir(dir)) != NULL)
+        printf("%s\n", entry->d_name);
+
+    closedir(dir);
+
+    return 0;
+}
